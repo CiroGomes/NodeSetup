@@ -6,36 +6,27 @@ const TOKEN_PATH = "store/token.json";
 
 class MyController {
   async method(req, res) {
-    const data = "2019-11-01";
+    const date = "2019-10-25";
 
     const auth = req.oAuth2Client;
 
-
     const service = google.admin({ version: "reports_v1", auth });
-    service.activities.list(
-      {
-        userKey: "all",
-        applicationName: "login",
-        maxResults: 10
-      },
-      (err, resReports) => {
-        if (err)
-          return console.error("The API returned an error:", err.message);
 
-        const activities = resReports.data.items;
-        if (activities.length) {
-          console.log("Logins:");
-          res.send(activities);
-          activities.forEach(activity => {
-            console.log(
-              `${activity.id.time}: ${activity.actor.email} (${activity.events[0].name})`
-            );
-          });
-        } else {
-          console.log("No logins found.");
-        }
-      }
-    );
+    const params = [
+      "accounts:is_2sv_enrolled",
+      "drive:num_owned_items_with_visibility_public_delta",
+      // "drive:last_active_usage_time",
+      "gmail:num_spam_emails_received",
+      "gmail:last_interaction_time"
+    ];
+
+    service.userUsageReport
+      .get({
+        userKey: "all",
+        date,
+        parameters: params.join(",")
+      })
+      .then(response => res.json(response));
   }
 }
 

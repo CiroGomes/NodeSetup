@@ -4,7 +4,6 @@ import readline from "readline"
 
 // import key from '../../store/auth.json';
 const SCOPES = [
-  "https://www.googleapis.com/auth/admin.reports.audit.readonly",
   "https://www.googleapis.com/auth/admin.reports.usage.readonly"
 ];
 // const jwt = new google.auth.JWT(key.client_email, null, key.private_key, scopes);
